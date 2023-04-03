@@ -31,10 +31,20 @@ public:
     MainWindow(QWidget *parent = nullptr);
     ~MainWindow();
 
+// 信号函数需要用 slots 来定义
 private slots:
-    void on_actionversion_triggered();
+    // 接收相机图片信号的处理函数
+    void image_process(QImage img);
 
     void on_cameraConnBtn_clicked();
+
+    void on_serialAct_triggered();
+
+    void on_versionAct_triggered();
+
+    void on_snapPathBtn_clicked();
+
+    void on_snapBtn_clicked();
 
 private:
     Ui::MainWindow *ui;
@@ -45,10 +55,5 @@ private:
     // 处理Graphics
     QGraphicsScene *cm_scene;
     QGraphicsPixmapItem *cm_image_item;
-
-    // 启动相机
-    void startCamera();
-    void Image_process(QImage img);
-
 };
 #endif // MAINWINDOW_H

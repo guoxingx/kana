@@ -7,20 +7,20 @@
     <x>0</x>
     <y>0</y>
     <width>1050</width>
-    <height>600</height>
+    <height>800</height>
    </rect>
   </property>
   <property name="windowTitle">
-   <string>MainWindow</string>
+   <string>波前探测平台 v0.2 测试</string>
   </property>
   <widget class="QWidget" name="centralwidget">
    <widget class="QPushButton" name="cameraConnBtn">
     <property name="geometry">
      <rect>
-      <x>10</x>
-      <y>10</y>
+      <x>840</x>
+      <y>20</y>
       <width>160</width>
-      <height>90</height>
+      <height>50</height>
      </rect>
     </property>
     <property name="text">
@@ -30,12 +30,93 @@
    <widget class="QGraphicsView" name="cameraGV">
     <property name="geometry">
      <rect>
-      <x>180</x>
-      <y>10</y>
+      <x>20</x>
+      <y>20</y>
       <width>800</width>
       <height>450</height>
      </rect>
     </property>
+   </widget>
+   <widget class="QFrame" name="frame">
+    <property name="geometry">
+     <rect>
+      <x>20</x>
+      <y>490</y>
+      <width>570</width>
+      <height>150</height>
+     </rect>
+    </property>
+    <property name="frameShape">
+     <enum>QFrame::Box</enum>
+    </property>
+    <property name="frameShadow">
+     <enum>QFrame::Raised</enum>
+    </property>
+    <property name="lineWidth">
+     <number>1</number>
+    </property>
+    <widget class="QPushButton" name="snapPathBtn">
+     <property name="geometry">
+      <rect>
+       <x>10</x>
+       <y>40</y>
+       <width>40</width>
+       <height>40</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>...</string>
+     </property>
+    </widget>
+    <widget class="QPushButton" name="snapBtn">
+     <property name="geometry">
+      <rect>
+       <x>10</x>
+       <y>90</y>
+       <width>160</width>
+       <height>50</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>保存当前图片</string>
+     </property>
+    </widget>
+    <widget class="QLineEdit" name="snapPathLine">
+     <property name="geometry">
+      <rect>
+       <x>60</x>
+       <y>40</y>
+       <width>500</width>
+       <height>40</height>
+      </rect>
+     </property>
+    </widget>
+    <widget class="QPushButton" name="snapAutoBtn">
+     <property name="geometry">
+      <rect>
+       <x>400</x>
+       <y>90</y>
+       <width>160</width>
+       <height>50</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>自动保存图片</string>
+     </property>
+    </widget>
+    <widget class="QLabel" name="label">
+     <property name="geometry">
+      <rect>
+       <x>10</x>
+       <y>10</y>
+       <width>120</width>
+       <height>30</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>保存图片</string>
+     </property>
+    </widget>
    </widget>
   </widget>
   <widget class="QMenuBar" name="menubar">
@@ -66,13 +147,25 @@
    <attribute name="toolBarBreak">
     <bool>false</bool>
    </attribute>
+   <addaction name="serialAct"/>
   </widget>
   <action name="versionAct">
    <property name="text">
     <string>版本</string>
    </property>
   </action>
+  <action name="serialAct">
+   <property name="icon">
+    <iconset resource="resources.qrc">
+     <normaloff>:/icons/statics/doraemon.jpg</normaloff>:/icons/statics/doraemon.jpg</iconset>
+   </property>
+   <property name="text">
+    <string>串口</string>
+   </property>
+  </action>
  </widget>
- <resources/>
+ <resources>
+  <include location="resources.qrc"/>
+ </resources>
  <connections/>
 </ui>

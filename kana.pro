@@ -1,4 +1,6 @@
-QT       += core gui
+QT       += \
+    core gui\
+    serialport
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
@@ -15,6 +17,9 @@ msvc {
 }
 #msvc:QMAKE_CXXFLAGS += -execution-charset:utf-8
 
+# 取消所有打印信息
+# DEFINES += QT_NO_DEBUG_OUTPUT
+
 #
 # 在项目根目录下的 frameworks/ 新建相关sdk的目录，把所有东西都放到该目录下。
 #
@@ -27,20 +32,28 @@ LIBS += -L$$PWD/frameworks/minsvision -lMVCAMSDK #-lMVCAMSDK_X64
 # 尽量不要手动修改，用qtcreator生成
 SOURCES += \
     camera/capturethread.cpp \
+    camera/minsvision.cpp \
     main.cpp \
     mainwindow.cpp \
+    views/serialportdlg.cpp \
     views/versiondlg.cpp
 
 HEADERS += \
     camera/capturethread.h \
+    camera/minsvision.h \
     mainwindow.h \
+    views/serialportdlg.h \
     views/versiondlg.h
 
 FORMS += \
     mainwindow.ui \
+    views/serialportdlg.ui \
     views/versiondlg.ui
 
 ## Default rules for deployment.
 #qnx: target.path = /tmp/$${TARGET}/bin
 #else: unix:!android: target.path = /opt/$${TARGET}/bin
 #!isEmpty(target.path): INSTALLS += target
+
+RESOURCES += \
+    resources.qrc

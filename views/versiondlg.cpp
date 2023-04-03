@@ -1,4 +1,4 @@
-#include "versiondlg.h"
+﻿#include "versiondlg.h"
 #include "ui_versiondlg.h"
 
 VersionDlg::VersionDlg(QWidget *parent) :
