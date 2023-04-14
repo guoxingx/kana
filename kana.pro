@@ -31,6 +31,7 @@ LIBS += -L$$PWD/frameworks/minsvision -lMVCAMSDK #-lMVCAMSDK_X64
 
 # 尽量不要手动修改，用qtcreator生成
 SOURCES += \
+    analyse/measure.cpp \
     camera/capturethread.cpp \
     camera/minsvision.cpp \
     main.cpp \
@@ -39,8 +40,10 @@ SOURCES += \
     views/versiondlg.cpp
 
 HEADERS += \
+    analyse/measure.h \
     camera/capturethread.h \
     camera/minsvision.h \
+    camera/types.h \
     mainwindow.h \
     views/serialportdlg.h \
     views/versiondlg.h

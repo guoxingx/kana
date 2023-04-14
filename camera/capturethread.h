@@ -4,12 +4,8 @@
 #include <QThread>
 #include <QImage>
 
-typedef struct _SENSOR_INFO{
-    int     width;
-    int     height;
-    int     bufSize;
-    int     bufSizeMax;
-}Sensor_Info;
+#include "camera/types.h"
+#include "camera/minsvision.h"
 
 
 // 继承QThread，负责读取图片的昂贵操作
@@ -36,6 +32,9 @@ public:
     // 返回相机状态
     int8_t get_status();
 
+    // 保存图片
+    int8_t save_image(char* filename);
+
 private:
     // 相机状态
     // -1: 退出
@@ -55,7 +54,8 @@ private:
     // 灰度图使用
     QVector<QRgb> grayColourTable;
 
-//    MinsVision msv;
+
+    MinsVision msv;
 
 signals:
     void captured(QImage img);

@@ -29,6 +29,8 @@ BYTE                    *g_readBuf=NULL;    //画板显示数据区
 int                     g_read_fps=0;       //统计读取帧率
 int                     g_disply_fps=0;     //统计显示帧率
 
+int gImageIndex = 0;
+
 // 初始化
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
@@ -40,10 +42,13 @@ MainWindow::MainWindow(QWidget *parent)
     ui->statusbar->showMessage(tr("寄"), 3000);
 
     // 设置相机图片UI
+    // QGraphicsView 用 setScene(QGraphicsScene&) 绑定一个 Scene 对象
     cm_scene = new QGraphicsScene(this);
     ui->cameraGV->setScene(cm_scene);
     // 实例化相机数据流线程
     cm_thread = new CaptureThread(this);
+
+//    current_img = nullptr;
 }
 
 // 结束 销毁
@@ -60,8 +65,6 @@ MainWindow::~MainWindow()
 // 收到图片更新信号 处理图片
 void MainWindow::image_process(QImage img)
 {
-    qDebug("receive image: %i, %i");
-
     // 清除当前图片
     if (cm_image_item)
     {
@@ -73,6 +76,9 @@ void MainWindow::image_process(QImage img)
     // 展示图片
     cm_image_item = cm_scene->addPixmap(QPixmap::fromImage(img));
     cm_scene->setSceneRect(0, 0, img.width(), img.height());
+
+    // 替换当前图片
+    current_img = img;
 
     // 更新展示fps
     g_disply_fps++;
@@ -88,7 +94,8 @@ void MainWindow::on_cameraConnBtn_clicked()
         qDebug("camera init result: %d", res);
 
         // 连接信号
-        connect(cm_thread, SIGNAL(captured(QImage)), this, SLOT(image_process(QImage)), Qt::BlockingQueuedConnection);
+        connect(cm_thread, SIGNAL(captured(QImage)), this,
+                SLOT(image_process(QImage)), Qt::BlockingQueuedConnection);
         cm_thread->start();
         qDebug("start camera");
     }
@@ -132,7 +139,8 @@ void MainWindow::on_versionAct_triggered()
 // 选择路径：相机图片保存路径
 void MainWindow::on_snapPathBtn_clicked()
 {
-    QFileDialog* openFilePath = new QFileDialog( this, "Select Folder", "");     //打开一个目录选择对话框
+    //打开一个目录选择对话框
+    QFileDialog* openFilePath = new QFileDialog( this, "Select Folder", "");
     openFilePath-> setFileMode( QFileDialog::Directory );
     if ( openFilePath->exec() == QDialog::Accepted )
     {
@@ -145,49 +153,31 @@ void MainWindow::on_snapPathBtn_clicked()
 // 保存图片：相机当前帧
 void MainWindow::on_snapBtn_clicked()
 {
-    tSdkFrameHead	tFrameHead;
-    BYTE			*pbyBuffer;
-    BYTE			*pbImgBuffer;
-    char            filename[512] = {0};
+    if (cm_thread->get_status() != 1)
+    {
+        ui->statusbar->showMessage(tr("相机未启动"), 6000);
+        return;
+    }
+
+    // 获取保存路径
     QString path = ui->snapPathLine->text();
+    if (path.length() == 0)
+    {
+        ui->statusbar->showMessage(tr("未选取路径"), 6000);
+        return;
+    }
+    gImageIndex ++;
 
-    char* dir = path.toLatin1().data();
-    qDebug("save snap into path: %s", dir);
+    // 添加文件名
+    path.append("/" + QString::number(gImageIndex) + ".bmp");
+    qDebug("image: %p", &current_img);
 
-    // CameraSnapToBuffer抓拍一张图像保存到buffer中
-    // !!!!!!注意：CameraSnapToBuffer 会切换分辨率拍照，速度较慢。做实时处理，请用CameraGetImageBuffer函数取图或者回调函数。
-//    if(CameraSnapToBuffer(g_hCamera,&tFrameHead,&pbyBuffer,1000) == CAMERA_STATUS_SUCCESS)
-//    {
-//        switch(g_SaveImage_type){
-//            case 1:
-//            break;
-
-//            case 2:
-//            break;
-
-//            case 3:
-//                pbImgBuffer = (unsigned char*)malloc(g_tCapability.sResolutionRange.iHeightMax*g_tCapability.sResolutionRange.iWidthMax*3);
-//                /*
-//                将获得的相机原始输出图像数据进行处理，叠加饱和度、
-//                颜色增益和校正、降噪等处理效果，最后得到RGB888
-//                格式的图像数据。
-//                */
-//                CameraImageProcess(g_hCamera, pbyBuffer,pbImgBuffer,&tFrameHead);
-
-//                //将图像缓冲区的数据保存成图片文件。
-//                CameraSaveImage(g_hCamera, filename,pbImgBuffer, &tFrameHead, FILE_BMP, 100);
-//                //释放由CameraGetImageBuffer获得的缓冲区。
-//                CameraReleaseImageBuffer(g_hCamera,pbImgBuffer);
-//                free(pbImgBuffer);
-//            break;
-
-//            case 4:
-//                CameraSaveImage(g_hCamera, filename,pbyBuffer, &tFrameHead, FILE_RAW, 100);
-//                CameraReleaseImageBuffer(g_hCamera,pbImgBuffer);
-//            break;
-
-//            default :
-//            break;
-//        }
-//    }
+    // 保存图片
+    bool res = current_img.save(path);
+    if (!res) {
+        qDebug("failed to save image: %s", path.toStdString().data());
+        ui->statusbar->showMessage(tr("图片保存失败"), 6000);
+    } else {
+        ui->statusbar->showMessage(tr("图片保存成功"), 6000);
+    }
 }

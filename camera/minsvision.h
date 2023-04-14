@@ -4,13 +4,14 @@
 #include <windows.h>
 #include "CameraApi.h"
 
+#include "camera/types.h"
 
 class MinsVision
 {
 public:
     MinsVision();
 
-//    int init(Sensor_Info* info);
+    int init(Sensor_Info* info);
     int get_image(unsigned char* res);
 
 private:

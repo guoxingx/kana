@@ -9,6 +9,8 @@
 #include <windows.h>
 #include "CameraApi.h"
 
+using namespace std;
+
 typedef struct _WIDTH_HEIGHT{
     int     display_width;
     int     display_height;
@@ -55,5 +57,8 @@ private:
     // 处理Graphics
     QGraphicsScene *cm_scene;
     QGraphicsPixmapItem *cm_image_item;
+
+    // 当前图片
+    QImage current_img;
 };
 #endif // MAINWINDOW_H

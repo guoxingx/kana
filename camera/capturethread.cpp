@@ -17,8 +17,9 @@ CaptureThread::CaptureThread(QObject *parent) :
 
 int CaptureThread::init()
 {
-//    msv.init(&sensorInfo);
-//    readBuf = (unsigned char*)malloc(sensorInfo.bufSizeMax * 3);
+    msv.init(&sensorInfo);
+    readBuf = (unsigned char*)malloc(sensorInfo.bufSizeMax * 3);
+    status = 0;
     return 0;
 }
 
@@ -43,7 +44,12 @@ void CaptureThread::run()
         }
 
         // 获取图像数据
-//        msv.get_image(readBuf);
+        int res = msv.get_image(readBuf);
+        if (res != 0)
+        {
+            qDebug("failed to get image from MinsVision: %i", res);
+            continue;
+        }
 
         // 防止读取过程中quit状态改变 直接退出
         if(status == -1) break;
@@ -77,7 +83,23 @@ void CaptureThread::stop()
     status = -1;
 }
 
+// 返回当前状态
 int8_t CaptureThread::get_status()
 {
     return status;
+}
+
+// 保存图片
+int8_t CaptureThread::save_image(char* filename)
+{
+//    CameraHandle    hCamera,
+//    char*           lpszFileName,
+//    BYTE*           pbyImageBuffer,
+//    tSdkFrameHead*  pFrInfo,
+//    UINT            byFileType,
+//    BYTE            byQuality
+
+    //将图像缓冲区的数据保存成图片文件。
+//    CameraSaveImage(g_hCamera, filename, pbImgBuffer, &tFrameHead, FILE_BMP, 100);
+    return 0;
 }
