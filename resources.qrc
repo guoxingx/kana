@@ -1,0 +1,20 @@
+<RCC>
+    <qresource prefix="/icons">
+        <file>statics/doraemon.jpg</file>
+        <file>statics/doge.jpg</file>
+        <file>statics/next.png</file>
+        <file>statics/cat.jpg</file>
+        <file>statics/beamprofiler.png</file>
+        <file>statics/intensity.png</file>
+        <file>statics/mode.png</file>
+        <file>statics/power.png</file>
+        <file>statics/spectrum.png</file>
+        <file>statics/wavefront.png</file>
+        <file>statics/arrow_down.png</file>
+        <file>statics/arrow_left.png</file>
+        <file>statics/arrow_right.png</file>
+        <file>statics/arrow_up.png</file>
+        <file>statics/play_green.png</file>
+        <file>statics/repeat_on.png</file>
+    </qresource>
+</RCC>
